@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Movie>
+
+<div class="container py-5">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 mb-4 d-flex">
+                <div class="card shadow-lg border-0 rounded-lg overflow-hidden w-100">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h5 class="card-title">@item.Name</h5>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="~/movies/@item.ImgUrl" class="card-img" alt="Image of @item.Name" style="max-height: 300px; object-fit: cover;">
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <p class="card-text text-muted">Description: @item.Description</p>
+
+                                <p class="card-text">
+                                    Price:
+                                    <span class="badge bg-secondary">$@item.Price</span>
+                                </p>
+
+                                <p class="card-text">Cinema: <strong>@item.Cinema.Name</strong></p>
+                                <p class="card-text">Start Date: <strong>@item.StartDate.ToShortDateString()</strong></p>
+                                <p class="card-text">End Date: <strong>@item.EndDate.ToShortDateString()</strong></p>
+                                <p class="card-text">Category: <strong>@item.Category.Name</strong></p>
+
+                                <div class="trailer-container">
+                                    @if (!string.IsNullOrEmpty(item.TrailerUrl))
+                                    {
+                                        <div class="trailer">
+                                            <video controls style="width: 100%; border-radius: 10px;">
+                                                <source src="@item.TrailerUrl" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <img src="@item.TrailerUrl" class="card-img" alt="Trailer image" style="max-height: 200px; object-fit: cover; border-radius: 10px;">
+                                    }
+                                </div>
+
+                                <div class="mt-4">
+                                    <a href="#" class="btn btn-success w-100 shadow-sm rounded-pill">Book Ticket</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .card-body {
+        background-color: #f9f9f9;
+    }
+
+    .trailer-container {
+        margin-top: 10px;
+    }
+
+    .trailer img,
+    .trailer video {
+        border-radius: 10px;
+        max-height: 200px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .btn {
+        transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+
+        .btn:hover {
+            background-color: #28a745;
+            transform: scale(1.05);
+        }
+
+    .badge {
+        padding: 8px 15px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                card.style.transform = 'scale(1.02)';
+            });
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = 'scale(1)';
+            });
+        });
+    });
+</script>

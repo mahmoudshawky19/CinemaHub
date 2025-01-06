@@ -1,0 +1,105 @@
+﻿@model Cinema
+<div class="container mt-5">
+    <div class="row mb-3">
+        <h2><a href="/Admin/Cinema/Index"><i class="bi bi-arrow-left"></i></a> Create New Cinema</h2>
+    </div>
+
+    <form asp-action="Create" asp-controller="Cinema" enctype="multipart/form-data" method="post">
+        <div class="mb-3">
+            <label for="Name" class="form-label">Cinema Name</label>
+            <input class="form-control" asp-for="Name">
+            <span asp-validation-for="Name" class="text-bg-warning"></span>
+        </div>
+        <div class="mb-3">
+            <label for="Description" class="form-label">Description</label>
+            <input class="form-control" asp-for="Description">
+            <span asp-validation-for="Description" class="text-bg-warning"></span>
+        </div>
+        <div class="mb-3">
+            <label for="Address" class="form-label">Address</label>
+            <input class="form-control" asp-for="Address">
+            <span asp-validation-for="Address" class="text-bg-warning"></span>
+        </div>
+        <div class="mb-3">
+            <label for="CinemaLogo" class="form-label">Cinema Logo</label>
+            <input type="file" class="form-control" id="CinemaLogo" name="CinemaLogo" onchange="previewImage(event)">
+            <span asp-validation-for="CinemaLogo" class="text-bg-warning"></span>
+            <img id="imagePreview" src="#" alt="Image Preview" style="display: none; margin-top: 10px; max-width: 300px;">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml"></partial>
+}
+
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('imagePreview');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    }
+</script>
+<style>
+    .container {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .btn {
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        .btn:hover {
+            background-color: #0069d9;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    .modal-content {
+        border-radius: 10px;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .modal-footer button {
+        border-radius: 5px;
+    }
+</style>

@@ -1,0 +1,234 @@
+﻿@if (TempData["ReviewSuccess"] != null)
+{
+    <div class="alert alert-success mt-3" id="reviewSuccessMessage">
+        <strong>@TempData["ReviewSuccess"]</strong>
+    </div>
+
+    <script>
+         setTimeout(function () {
+            var message = document.getElementById('reviewSuccessMessage');
+            if (message) {
+                message.style.opacity = 0;
+                setTimeout(function () {
+                    message.style.display = 'none';
+                }, 500);  
+            }
+        }, 5000); 
+    </script>
+}
+
+
+
+<div class="container mt-5">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 mb-4 d-flex">
+                <div class="card shadow-lg border-light" style="width: 100%; border-radius: 15px;">
+                    <div class="card-header text-center bg-primary text-white rounded-top" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                        <h5 class="card-title">@item.Name</h5>
+                    </div>
+
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img src="~/movies/@item.ImgUrl" class="card-img" alt="Image of @item.Name" style="max-height: 400px; object-fit: cover; border-top-left-radius: 15px; border-bottom-left-radius: 15px;">
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <p class="card-text">Description: @item.Description</p>
+                                <p class="card-text">
+                                    Price: <span class="badge bg-dark">$@item.Price</span>
+                                </p>
+                                <p class="card-text"><strong>Cinema:</strong> @item.Cinema.Name</p>
+                                <p class="card-text"><strong>Start Date:</strong> @item.StartDate.ToShortDateString()</p>
+                                <p class="card-text"><strong>End Date:</strong> @item.EndDate.ToShortDateString()</p>
+                                <p class="card-text"><strong>Category:</strong> @item.Category.Name</p>
+
+                                <div class="text-info mb-3">
+                                    <strong>Cast:</strong>
+                                    @foreach (var item2 in ViewBag.c)
+                                    {
+                                        <img src="/cast/@item2.ProfilePicture" alt="Actor Image" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover; margin-right: 5px;">
+                                    }
+                                </div>
+
+                                <p class="card-text">
+                                    <strong>Trailer:</strong>
+                                    @if (!string.IsNullOrEmpty(item.TrailerUrl))
+                                    {
+                                        <div class="trailer mb-3">
+                                            <video controls style="width: 100%; border-radius: 15px;">
+                                                <source src="@item.TrailerUrl" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <img src="@item.TrailerImgUrl" class="card-img" alt="Trailer image" style="max-height: 200px; object-fit: cover; border-radius: 15px;">
+                                    }
+                                </p>
+
+                                <form action="/Customer/Cart/AddToCart" method="post">
+                                    <input type="hidden" name="movieId" value="@item.MovieId" />
+                                    <div class="row mb-3 d-flex justify-content-end">
+                                        <div class="col-4">
+                                            <input type="number" placeholder="Count..." class="form-control" name="count" min="1" max="10">
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-success w-100 shadow-lg">Book Ticket</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <div class="mt-4">
+                                    <h6><strong>Customer Reviews</strong></h6>
+
+                                    @foreach (var review in item.Reviews)
+                                    {
+                                        <div class="border-bottom mb-3">
+                                            <div class="d-flex justify-content-between">
+                                                <span><strong>@review.Name</strong></span>
+                                                <span class="text-warning">
+                                                    @for (int i = 0; i < (review.Rating ?? 0); i++)
+                                                    {
+                                                        <i class="fa fa-star"></i>
+                                                    }
+                                                    @for (int i = (review.Rating ?? 0); i < 5; i++)
+                                                    {
+                                                        <i class="fa fa-star-o"></i>
+                                                    }
+                                                </span>
+                                            </div>
+                                            <p>@review.Review</p>
+                                        </div>
+                                    }
+
+                                    <form action="/Customer/Home/SubmitReview" method="post">
+                                        <input type="hidden" name="movieId" value="@item.MovieId" />
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label for="name">Your Name</label>
+                                                <input type="text" name="name" id="name" class="form-control" placeholder="Enter your name" required />
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                                <label for="rating">Your Rating</label>
+                                                <div class="stars">
+                                                    <span class="star" data-rating="1">&#9733;</span>
+                                                    <span class="star" data-rating="2">&#9733;</span>
+                                                    <span class="star" data-rating="3">&#9733;</span>
+                                                    <span class="star" data-rating="4">&#9733;</span>
+                                                    <span class="star" data-rating="5">&#9733;</span>
+                                                </div>
+                                                <input type="hidden" name="rating" id="rating" />
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                                <label for="review">Your Review</label>
+                                                <textarea name="review" id="review" class="form-control" rows="3" placeholder="Write your review here..." required></textarea>
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                                <button type="submit" class="btn btn-primary w-100 shadow-lg">Submit Review</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .star {
+        font-size: 2rem;
+        cursor: pointer;
+        color: #ddd;
+    }
+
+        .star.selected,
+        .star.hover {
+            color: #FFD700;
+        }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .btn {
+        font-size: 1.1rem;
+        padding: 12px;
+        border-radius: 10px;
+        text-transform: uppercase;
+        transition: all 0.3s;
+    }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+    .stars .star {
+        font-size: 2rem;
+        cursor: pointer;
+        color: #ddd;
+        transition: color 0.2s;
+    }
+
+        .stars .star.selected,
+        .stars .star.hover {
+            color: #FFD700;
+        }
+
+        .stars .star:hover {
+            color: #FFD700;
+        }
+
+    #reviewSuccessMessage {
+        transition: opacity 0.5s ease-out;
+    }
+
+</style>
+
+<script>
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('mouseover', function () {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            document.querySelectorAll('.star').forEach(s => {
+                if (parseInt(s.getAttribute('data-rating')) <= rating) {
+                    s.classList.add('hover');
+                } else {
+                    s.classList.remove('hover');
+                }
+            });
+        });
+
+        star.addEventListener('mouseout', function () {
+            document.querySelectorAll('.star').forEach(s => {
+                s.classList.remove('hover');
+            });
+        });
+
+        star.addEventListener('click', function () {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            document.querySelectorAll('.star').forEach(s => {
+                s.classList.remove('selected');
+                if (parseInt(s.getAttribute('data-rating')) <= rating) {
+                    s.classList.add('selected');
+                }
+            });
+
+             document.getElementById('rating').value = rating;
+        });
+    });
+</script>

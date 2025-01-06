@@ -1,0 +1,61 @@
+﻿@model Actor
+<div class="container mt-4">
+    <div class="row mb-3">
+        <h2><a href="/Admin/Actor/Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to List</a> Edit Actor: @Model.FirstName @Model.LastName</h2>
+    </div>
+
+    <form asp-action="Edit" asp-controller="Actor" enctype="multipart/form-data" method="post">
+        <input type="hidden" name="ActorId" value="@Model.ActorId">
+
+        <div class="mb-3">
+            <label for="FirstName" class="form-label">First Name</label>
+            <input asp-for="FirstName" class="form-control" placeholder="Enter first name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="LastName" class="form-label">Last Name</label>
+            <input asp-for="LastName" class="form-control" placeholder="Enter last name" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="Bio" class="form-label">Bio</label>
+            <textarea asp-for="Bio" class="form-control" rows="3" placeholder="Short biography"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="News" class="form-label">News</label>
+            <input asp-for="News" class="form-control" placeholder="Latest news about actor">
+        </div>
+
+        <div class="mb-3">
+            <label for="ProfilePicture" class="form-label">Profile Picture</label>
+            <input type="file" class="form-control" id="ProfilePicture" name="ProfilePicture" onchange="previewImage(event)">
+            <img id="imagePreview" src="~/cast/@Model.ProfilePicture" alt="Image Preview" class="img-thumbnail mt-3" style="max-width: 150px;">
+        </div>
+
+        <div class="mb-3">
+            <label for="MovieId" class="form-label">Select Movies</label>
+            <select class="form-select" name="MovieId" multiple>
+                @foreach (var item2 in ViewBag.a)
+                {
+                    <option value="@item2.MovieId">@item2.Name</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('imagePreview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+}

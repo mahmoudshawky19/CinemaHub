@@ -1,0 +1,80 @@
+﻿@model Staff
+<div class="container mt-5">
+    <div class="row mb-3">
+        <h2><a href="/Admin/Staff/Index"><i class="bi bi-arrow-left"></i></a> Create staff</h2>
+    </div>
+
+    <form asp-action="Create" asp-controller="Staff" method="post">
+        <div class="mb-3">
+            <label for="CategoryName" class="form-label"> Name</label>
+            <input class="form-control" asp-for="Name">
+            <span asp-validation-for="Name" class="text-bg-warning"></span>
+        </div>
+        <div class="mb-3">
+            <label for="specialize" class="form-label"> specialize</label>
+            <input class="form-control" asp-for="specialize">
+            <span asp-validation-for="specialize" class="text-bg-warning"></span>
+        </div>        
+        <div class="mb-3">
+            <label for="salary" class="form-label"> salary</label>
+            <input class="form-control" asp-for="salary">
+            <span asp-validation-for="salary" class="text-bg-warning"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml"></partial>
+}
+<style>
+    .container {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        border-color: #3498db;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .btn {
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+        .btn:hover {
+            background-color: #0069d9;
+            color: white;
+            transform: scale(1.05);
+        }
+
+    .modal-content {
+        border-radius: 10px;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .modal-footer button {
+        border-radius: 5px;
+    }
+</style>

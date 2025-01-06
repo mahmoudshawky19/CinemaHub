@@ -1,0 +1,140 @@
+﻿@model List<Movie>
+
+@if (Model.Count == 0)
+{
+     <div class="no-movies-container">
+        <div class="no-movies-message">
+            <h2>No Movies Available</h2>
+            <p class="text-muted">We apologize, but there are no movies available at the moment. Please check back later!</p>
+            <a href="/Customer/Home" class="btn btn-outline-primary">Go to Home</a>
+
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            @foreach (var items in Model)
+            {
+                <div class="col-12 col-md-6 mb-4 d-flex">
+                    <div class="card shadow-lg" style="width: 100%;">
+                        <div class="card-header text-center bg-primary text-white">
+                            <h5 class="card-title">@items.Name</h5>
+                        </div>
+
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="~/movies/@items.ImgUrl" class="card-img" alt="Image of @items.Name" style="max-height: 250px; object-fit: cover;">
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        Price:
+                                        <span class="badge bg-dark">@items.Price</span>
+                                    </p>
+
+                                    <p class="card-text">
+                                        <strong>Cinema:</strong> @items.Cinema.Name
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Start Date:</strong> @items.StartDate.ToShortDateString()
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>End Date:</strong> @items.EndDate.ToShortDateString()
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Category:</strong>
+                                        <a href="@Url.Action("Kinds", "Category", new { name = items.Category.Name })" class="text-info">@items.Category.Name</a>
+                                    </p>
+
+                                    <p class="card-text">
+                                        <strong>Movie Status:</strong>
+                                        @if (items.MovieStatus.ToString() == "Available")
+                                        {
+                                            <span class="badge bg-success">@items.MovieStatus</span>
+                                        }
+                                        else if (items.MovieStatus.ToString() == "Expired")
+                                        {
+                                            <span class="badge bg-danger">@items.MovieStatus</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@items.MovieStatus</span>
+                                        }
+                                    </p>
+
+                                    <div class="d-flex justify-content-between">
+                                        <a href="/Customer/Home/Details?movieid=@items.MovieId" class="btn btn-outline-primary">More Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="bookingModal@items.MovieId" tabindex="-1" aria-labelledby="bookingModalLabel@items.MovieId" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="bookingModalLabel@items.MovieId">Book Ticket for @items.Name</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="userName" class="form-label">Your Name</label>
+                                        <input type="text" class="form-control" id="userName" placeholder="Enter your name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="seats" class="form-label">Seats</label>
+                                        <input type="number" class="form-control" id="seats" placeholder="Number of seats">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+ <style>
+.no-movies-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;  
+    background-color: #f8f9fa;  
+}
+
+.no-movies-message {
+    text-align: center;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-movies-message h2 {
+    font-size: 2rem;
+    color: #343a40;  
+    margin-bottom: 20px;
+}
+
+.no-movies-message p {
+    font-size: 1.2rem;
+    color: #6c757d;  
+}
+
+.no-movies-message a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.no-movies-message a:hover {
+    text-decoration: underline;
+}
+</style>

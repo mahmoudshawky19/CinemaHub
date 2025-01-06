@@ -1,0 +1,26 @@
+﻿ @model Staff
+<div class="container mt-4">
+    <div class="row mb-3">
+        <h2><a href="/Admin/Staff/Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to Staff</a> Edit Category: @Model.Name</h2>
+    </div>
+
+    <form asp-action="Edit" asp-controller="Staff" method="post">
+        <input type="hidden" class="form-control" id="CategoryName" name="Id" value="@Model.Id">
+
+        <div class="mb-3">
+            <label for="CategoryName" class="form-label"> Name</label>
+            <input asp-for="Name" class="form-control" placeholder="Enter name" required>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="specialize" class="form-label">specialize</label>
+            <input asp-for="specialize" class="form-control" placeholder="Enter specialize" required>
+            <span asp-validation-for="specialize" class="text-danger"></span>
+        </div>  <div class="mb-3">
+            <label for="salary" class="form-label">v</label>
+            <input asp-for="salary" class="form-control" placeholder="Enter salary" required>
+            <span asp-validation-for="salary" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>

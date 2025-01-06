@@ -1,0 +1,175 @@
+﻿@model Movie
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <h2>
+            <a href="/Admin/Movie/Index" class="text-primary"><i class="bi bi-arrow-left"></i> Back to Movies</a>
+        </h2>
+    </div>
+
+    <div class="row">
+        <form asp-action="Create" asp-controller="Movie" enctype="multipart/form-data" method="post" class="shadow p-4 rounded bg-light">
+            <h3 class="text-center mb-4">Create New Movie</h3>
+
+             <div class="mb-3">
+                <label for="Name" class="form-label">Movie Name</label>
+                <input class="form-control" asp-for="Name" placeholder="Enter movie name" required>
+            </div>
+
+             <div class="mb-3">
+                <label for="Description" class="form-label">Description</label>
+                <textarea class="form-control" asp-for="Description" placeholder="Enter movie description" rows="4" required></textarea>
+            </div>
+
+             <div class="mb-3">
+                <label for="Price" class="form-label">Price</label>
+                <input type="number" class="form-control" asp-for="Price" placeholder="Enter movie price" required>
+            </div>
+
+             <div class="mb-3">
+                <label for="StartDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control" asp-for="StartDate" required>
+            </div>
+
+             <div class="mb-3">
+                <label for="EndDate" class="form-label">End Date</label>
+                <input type="date" class="form-control" asp-for="EndDate" required>
+            </div>
+            <div class="mb-3">
+                <label for="MovieStatus" class="form-label">Movie Status</label>
+                <select class="form-select" asp-for="MovieStatus" required>
+                    @foreach (var status in ViewBag.MovieStatus as List<Models.MovieStatus>)
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </select>
+            </div>
+
+
+ 
+            <div class="mb-3">
+                <label for="ImgUrl" class="form-label">Movie Image</label>
+                <input type="file" class="form-control" id="ImgUrl" name="ImgUrl" onchange="previewImage(event)">
+                <div id="imagePreviewContainer" class="mt-2" style="display: none;">
+                    <img id="imagePreview" src="#" alt="Image Preview" class="img-fluid rounded" style="max-width: 300px;">
+                </div>
+            </div>
+ 
+            <div class="mb-3">
+                <label for="TrailerUrl" class="form-label">Movie Trailer URL</label>
+                <input type="url" class="form-control" id="TrailerUrl" name="TrailerUrl" placeholder="https://www.youtube.com/watch?v=example" onchange="showTrailer()" required>
+            </div>
+
+             <div class="mb-3">
+                <label for="Cinema" class="form-label">Cinema</label>
+                <select class="form-select" name="CinemaId" required>
+                    @foreach (var item in ViewBag.c)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+
+             <div class="mb-3">
+                <label for="Category" class="form-label">Category</label>
+                <select class="form-select" name="CategoryId" required>
+                    @foreach (var item in ViewBag.ce)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
+
+             <div class="text-center">
+                <button type="submit" class="btn btn-success btn-lg w-100 mt-3">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial.cshtml"></partial>
+}
+
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        const container = document.getElementById('imagePreviewContainer');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                container.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            container.style.display = 'none';
+        }
+    }
+
+    function showTrailer() {
+        const trailerUrl = document.getElementById('TrailerUrl').value;
+        const iframe = document.createElement('iframe');
+        iframe.src = trailerUrl;
+        iframe.width = "100%";
+        iframe.height = "315px";
+        iframe.allowFullscreen = true;
+        iframe.classList.add('mt-3');
+        document.getElementById('trailerContainer').innerHTML = '';
+        document.getElementById('trailerContainer').appendChild(iframe);
+    }
+</script>
+
+<style>
+     .form-label {
+        font-weight: bold;
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+    .btn {
+        transition: all 0.3s ease-in-out;
+    }
+
+        .btn:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+    .text-center h3 {
+        color: #333;
+    }
+
+    .container {
+        background-color: #f9f9f9;
+        padding: 40px;
+        border-radius: 15px;
+    }
+
+    .shadow {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .rounded {
+        border-radius: 8px;
+    }
+
+     #trailerContainer iframe {
+        border-radius: 8px;
+    }
+
+     #imagePreview {
+        border-radius: 8px;
+    }
+</style>
